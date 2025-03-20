@@ -1,0 +1,16 @@
+{#- Jinja Template --> Sparql Query
+ | Simple description of a given subject, or just generic spo dump if no subject is given
+ | variables in template:
+ |    - (optional) subject: uri for the subject to be described
+ |    - (optional) pagesize: number of triples to return (no limit applied when no pagesize is given)
+ |    - (optional) offset: number of triples to skip
+-#}
+SELECT ?subject ?predicate ?object 
+WHERE {
+{%- if subject %}
+    BIND(<{{ subject }}> as ?subject)
+{%- endif %}
+  ?subject ?predicate ?object.
+} 
+{{ "LIMIT " ~ pagesize   if pagesize else "" }} {#- add limit  statement if provided #}
+{{ "OFFSET " ~ offset   if offset else "" }}    {#- add offset statement if provided #}

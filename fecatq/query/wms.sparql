@@ -1,0 +1,25 @@
+{#- Jinja Template --> Sparql Query
+ | Search for datasests on wms dataservices 
+ | variables in template:
+ |    - (optional) pagesize: number of datasets to return (no limit applied when no pagesize is given)
+ |    - (optional) offset: number of datasets to skip
+-#}
+PREFIX dcat:    <http://www.w3.org/ns/dcat#>
+PREFIX dct:      <http://purl.org/dc/terms/>
+PREFIX prov:    <http://www.w3.org/ns/prov#>
+PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
+PREFIX geof:    <http://www.opengis.net/def/function/geosparql/>
+PREFIX geo:     <http://www.opengis.net/ont/geosparql#>
+PREFIX schema:  <https://schema.org/>
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?dataset ?service
+WHERE {
+    ?dataset a dcat:Dataset .
+    ?service a dcat:DataService ;
+            dcat:servesDataset ?dataset ;
+            dct:conformsTo ?protocol .
+    FILTER (BOUND(?protocol) && ?protocol = 'OGC:WMS') . 
+} 
+{{ "LIMIT " ~ pagesize   if pagesize else "" }} {#- add limit  statement if provided #}
+{{ "OFFSET " ~ offset   if offset else "" }}    {#- add offset statement if provided #}
