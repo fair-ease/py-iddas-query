@@ -14,6 +14,7 @@ We recommend using git+ssh -- see [documentation on how to use ssh when connecti
 
 ```bash
 $ git clone git@github.com:fair-ease/py-iddas-query.git
+$ cd py-iddas-query
 $ poetry install
 $ poetry run iddas
 
